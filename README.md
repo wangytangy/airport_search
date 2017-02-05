@@ -5,7 +5,7 @@ Create a web app that calculates the distance (in nautical miles) between two ai
 
 OR
 
-1) Fire request when searching
+1) Fire request when searching (onkeyup event)
 2) Use clear interval/setinterval to delay request
 3) During long pauses (500ms), display responses in <ul> list
 4) 
