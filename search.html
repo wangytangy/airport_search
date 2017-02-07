@@ -9,12 +9,28 @@
   </head>
   <body>
 
+    <h2>Airport Calculator</h2>
 
-    <datalist id="airports">
-    </datalist>
+    <div class="jumbotron">
+      <h3>Search flights and find their distances</h3>
+      
+      <form class="" action="index.html" method="post">
+        <datalist id="airports"></datalist>
 
-    <input type="text" list="airports" id="input1">
-    <input type="text" list="airports" id="input2">
+        <div class="input-container">
+          <label for="input1">From:</label>
+          <input type="text" list="airports" id="input1">
+        </div>
+
+        <div class="input-container">
+          <label for="input2">To:</label>
+          <input type="text" list="airports" id="input2">
+        </div>
+      </form>
+
+    </div>
+
+
 
     <div id="map"></div>
 
