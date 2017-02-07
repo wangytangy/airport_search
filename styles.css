@@ -10,7 +10,7 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
-time, mark, audio, video, input {
+time, mark, audio, video, input, button {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -62,6 +62,7 @@ form {
 
 label {
   color: #eee;
+  margin: 3px 0;
 }
 
 #input1 {
@@ -69,9 +70,21 @@ label {
 }
 
 input {
-  font-size: 30px;
+  font-size: 16px;
+  width: 400px;
   height: 50px;
   padding: 5px 15px;
+}
+
+#submit {
+  padding: 10px 20px;
+  height: 60px;
+  align-self: flex-end;
+  background-color: #2ab27b;
+
+  color: #eee;
+  font-size: 16px;
+  font-weight: bold;
 
 }
 

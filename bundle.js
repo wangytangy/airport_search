@@ -76,6 +76,10 @@
 	  }, 200);
 	}
 
+	function handleSubmit() {
+	  console.log("submit!");
+	}
+
 	function attachInputListeners() {
 	  let elements = document.getElementsByTagName('input');
 	  for (let i = 0; i < elements.length; i++) {
@@ -83,8 +87,17 @@
 	  }
 	}
 
+	function attachButtonListener() {
+	  document.getElementById('submit').addEventListener('click', handleSubmit);
+	}
+
+	function submitSearch(e) {
+	  console.log("Hey");
+	}
+
 	document.addEventListener("DOMContentLoaded", function() {
 	  attachInputListeners();
+	  attachButtonListener();
 	});
 
 
