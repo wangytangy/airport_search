@@ -44,8 +44,13 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var Map = __webpack_require__(2);
 	let airports = __webpack_require__(1);
 	let id;
+
+	window.initMap = function() {
+	  Map.createMap();
+	}
 
 
 	function handleInputChange(e) {
@@ -72,22 +77,34 @@
 	      option.value = `${airports[id].name}` + " " + `(${airports[id].IATA})` + " - " + `${airports[id].city}`;
 	      dataList.appendChild(option);
 	    });
-
-	    console.log(filteredList);
-
 	  }, 200);
 	}
 
-
 	function handleSubmit() {
 	  let inputVal1 = document.getElementById('input1').value;
-	  let inputVal2 = document.getElementById('input2');
-	  let matches = inputVal1.match(/^[^\(]+/)
-	  if (matches[0]) {
-	    //search
-	    matches = matches[0].trim()
+	  let inputVal2 = document.getElementById('input2').value;
+
+	  let matches1 = inputVal1.match(/^[^\(]+/);
+	  let matches2 = inputVal2.match(/^[^\(]+/);
+	  let matches = [matches1, matches2]
+
+	  //loop through both inputs, assume "" and null values
+	  Map.clearMarkers();
+	  for (let i = 0; i < matches.length; i++) {
+	    if (matches[i]) {
+	      let location = airports[matches[i][0].trim()];
+	      debugger
+	      Map.setMarkers(location);
+	    }
 	  }
-	  debugger
+
+	  if (matches1 && matches2) {
+	    let airport1 = airports[matches1[0].trim()];
+	    let airport2 = airports[matches1[0].trim()];
+	    Map.setMarkers([airport1, airport2]);
+	  }
+
+	  //set markers
 	}
 
 	function attachInputListeners() {
@@ -101,9 +118,6 @@
 	  document.getElementById('submit').addEventListener('click', handleSubmit);
 	}
 
-	function submitSearch(e) {
-	  console.log("Hey");
-	}
 
 	document.addEventListener("DOMContentLoaded", function() {
 	  attachInputListeners();
@@ -14387,6 +14401,55 @@
 			"lng": "-149.539993286"
 		}
 	};
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	const Map = (function() {
+
+	  const API_KEY = "AIzaSyBj2czDtrlCW9CGb_JucuQqabbRRVWCjKE";
+	  let map;
+	  let markers = [];
+
+	  function createMap() {
+	    let usa = new google.maps.LatLng(37.09024, -95.712891);
+
+	    map = new google.maps.Map(document.getElementById('map'), {
+	      center: usa,
+	      zoom: 4
+	    });
+	  }
+
+	  function setMarkers(location) {
+	    let latLng = new google.maps.LatLng(parseInt(location.lat), parseInt(location.lng));
+
+	    let marker = new google.maps.Marker({
+	      position: latLng,
+	      title: 'Airport!'
+	    });
+	    markers.push(marker);
+	    marker.setMap(map);
+	  }
+
+	  function clearMarkers() {
+	    for (var i = 0; i < markers.length; i++) {
+	      markers[i].setMap(null)
+	    }
+	    markers = [];
+	  }
+
+
+	  return {
+	    createMap: createMap,
+	    setMarkers: setMarkers,
+	    clearMarkers: clearMarkers
+	  }
+
+	})();
+
+	module.exports = Map;
+
 
 /***/ }
 /******/ ]);

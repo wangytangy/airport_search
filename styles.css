@@ -25,14 +25,6 @@ body {
   font-family: sans-serif;
 }
 
-h2 {
-  font: bold 32px sans-serif;
-  color: #333;
-  text-align: center;
-  align-self: center;
-  padding: 20px 0;
-}
-
 h3 {
   color: #eee;
   font-size: 28px;
@@ -89,6 +81,7 @@ input {
 }
 
 #map {
-  height: 500px;
+  height: 400px;
   width: 700px;
+	margin: 20px auto;
 }
