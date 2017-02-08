@@ -39,6 +39,8 @@ saving unnecessary computation and allowing for smoother user experience.
 
 
 ```js
+//search.js
+
 function handleInputChange(e) {
   //sets a delay for the callback to be executed
   //avoids unnecessary computation until user pauses typing for 300ms
@@ -62,6 +64,8 @@ The eligible search results are then converted into `<option>` tags which are
 appended to a `<datalist>` element, which takes care of the rendering.
 
 ```js
+//search.js
+
 function createSearchResults(list) {
   //remove previous search results before adding new ones
   let dataList = document.getElementById('airports');
@@ -85,6 +89,8 @@ are instantiated. Google Map markers contain the lat and lng data needed to
 calculate nautical miles on a geodesic path.
 
 ```js
+//google_map.js
+
 function calcDistance(markers) {
   //return 0 if only user submits fewer than 2 locations
   if (markers.length < 2) {
@@ -142,6 +148,7 @@ be cleared. This is accomplished with a `clearMarkers` util function.
 
 ```js
 //search.js
+
 let markers = [];
 
 markers = Util.clearMarkers(markers);
@@ -163,6 +170,7 @@ function placeMarkers() {
 }
 
 //google_map.js
+
 function setMarkers(location) {
   //create LatLng object
   let latLng = new google.maps.LatLng(
@@ -201,6 +209,8 @@ Similar to markers, each path must be stored in an array to be referenced
 later for deletion.
 
 ```js
+//google_map.js
+
 function clearPaths(paths) {
   for (var i = 0; i < paths.length; i++) {
     paths[i].setMap(null);
