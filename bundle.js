@@ -46,6 +46,7 @@
 
 	var Map = __webpack_require__(2);
 	let airports = __webpack_require__(1);
+
 	let id;
 	let markers = [];
 	let paths = [];
