@@ -50,32 +50,33 @@
 	let markers = [];
 	let paths = [];
 
-	window.initMap = function() {
+	initMap = function() {
 	  Map.createMap();
 	}
 
 	function handleInputChange(e) {
-	  //loop through airports, filter by input
-	  //create <option> element, set it's value
-	  //append option to <datalist>
+	  //sets a delay for the callback to be executed
+	  //avoids unnecessary computation until user stops typing
 	  clearTimeout(id);
 	  id = setTimeout(function() {
-
 	    let inputID = e.target.id;
 	    let input = e.target.value.toLowerCase();
 	    let dataList = document.getElementById('airports');
 	    while (dataList.firstChild) dataList.removeChild(dataList.firstChild);
 	    let airportIDs = Object.keys(airports);
 
+	    //loop through airports, filter by input
 	    let filteredList = airportIDs.filter((id) => {
 	      return (airports[id].IATA.toLowerCase().indexOf(input) !== -1 ||
 	      airports[id].city.toLowerCase().indexOf(input) !== -1 ||
 	      airports[id].name.toLowerCase().indexOf(input) !== -1)
 	    }).slice(0, 10);
 
+	    //create <option> element, set it's value
 	    filteredList.forEach((id) => {
 	      let option = document.createElement('option');
 	      option.value = `${airports[id].name}` + " " + `(${airports[id].IATA})` + " - " + `${airports[id].city}`;
+	      //append option to <datalist>
 	      dataList.appendChild(option);
 	    });
 	  }, 200);
@@ -90,10 +91,9 @@
 	function handleSubmit() {
 	  let inputVal1 = document.getElementById('input1').value;
 	  let inputVal2 = document.getElementById('input2').value;
-
 	  let matches1 = inputVal1.match(/^[^\(]+/);
 	  let matches2 = inputVal2.match(/^[^\(]+/);
-	  let matches = [matches1, matches2]
+	  let matches = [matches1, matches2];
 
 	  //clear markers
 	  markers = Map.clearMarkers(markers);
@@ -108,14 +108,13 @@
 	  //reset bounds of map
 	  Map.resetBounds(markers);
 
+	  //clear paths and draw new path
+	  paths = Map.clearPaths(paths);
+	  paths.push(Map.drawPath(markers));
+
 	  //calculate distance and display it
 	  let nautMiles = Map.calcDistance(markers);
 	  changeHeader(markers, nautMiles);
-
-	  //clear paths
-	  path = Map.clearPaths(paths);
-	  //draw Map.polyline?
-	  path.push(Map.drawPath(markers));
 	}
 
 	function attachInputListeners() {
@@ -14418,12 +14417,10 @@
 /***/ function(module, exports) {
 
 	const Map = (function() {
-
 	  let map;
 
 	  function createMap() {
 	    let usa = new google.maps.LatLng(37.09024, -95.712891);
-
 	    map = new google.maps.Map(document.getElementById('map'), {
 	      center: usa,
 	      zoom: 4
@@ -14432,17 +14429,25 @@
 
 	  function setMarkers(location) {
 	    let latLng = new google.maps.LatLng(parseInt(location.lat), parseInt(location.lng));
-
 	    let marker = new google.maps.Marker({
 	      position: latLng,
 	      title: location.name,
-	      map: map
+	      map: map,
+	      animation: google.maps.Animation.DROP
 	    });
+
+	    var infowindow = new google.maps.InfoWindow({
+	      content: location.name
+	    });
+
+	    marker.addListener('click', function() {
+	      infowindow.open(map, marker);
+	    });
+
 	    return marker;
 	  }
 
 	  function clearMarkers(markers) {
-	    console.log("markers cleared!");
 	    for (var i = 0; i < markers.length; i++) {
 	      markers[i].setMap(null);
 	    }
@@ -14450,7 +14455,7 @@
 	  }
 
 	  function calcDistance(markers) {
-	    //return 0 if only 1 result
+	    //return 0 if only user submits fewer than 2 locations
 	    if (markers.length < 2) {
 	      return 0;
 	    }
@@ -14474,6 +14479,7 @@
 
 	  function clearPaths(paths) {
 	    for (var i = 0; i < paths.length; i++) {
+	      debugger
 	      paths[i].setMap(null);
 	    }
 	    return [];
