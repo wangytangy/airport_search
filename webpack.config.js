@@ -1,7 +1,7 @@
 module.exports = {
     entry: "./lib/search.js",
     output: {
-        path: "./",
+        path: "./lib",
         filename: "bundle.js"
     },
     module: {
