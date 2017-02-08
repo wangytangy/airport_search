@@ -6,8 +6,8 @@ AIRPORTS_ARRAY = {}
 
 CSV.foreach("../data/airports_us.csv") do |row|
   # debugger
-  airport_id = row[0]
-  AIRPORTS_ARRAY[airport_id] = {
+  airport_name = row[1]
+  AIRPORTS_ARRAY[airport_name] = {
     id: row[0],
     name: row[1],
     city: row[2],
