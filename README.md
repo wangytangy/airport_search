@@ -9,12 +9,12 @@ search actions and one for handling Google Map actions. A JSON file of airport
 data is provided for the scope of this project. Many APIs online require
 paid subscriptions so I will not be making AJAX requests to external sources.
 
-### Features
+## Features
 * Search for any airport in the US (with autocomplete)
 * See a Google Map with search results plotted
 * View trip distance in nautical miles
 
-### Technologies Used
+## Technologies Used
 * JavaScript
 * Google Maps/Geometry API
 * JSON/json-loader package
@@ -22,9 +22,9 @@ paid subscriptions so I will not be making AJAX requests to external sources.
 * HTML5
 * CSS3
 
-### Implementation
+##Implementation
 
-## Search
+### Search
 
 The search function draws upon a JSON file with US airport data which is loaded
 into the `search.js` file with the `json-loader` library. As users type in
@@ -78,7 +78,7 @@ function createSearchResults(list) {
 }
 ```
 
-## Calculating Distance in Nautical Miles
+### Calculating Distance in Nautical Miles
 
 Nautical miles between two airports are calculated after Google Maps markers
 are instantiated. Google Map markers contain the lat and lng data needed to
@@ -108,9 +108,9 @@ Google Geometry's `computeDistanceBetween` function to compute kilometers
 between two lat/lng coordinates. I then convert kilometers into nautical miles
 by dividing by 1.852 and rounding to 2 decimal digits.
 
-## Google Map (placing markers and drawing path)
+### Google Map (placing markers and drawing path)
 
-# Render Google Map
+#### Render Google Map
 Google Maps requires a callback function to render an initial map on
 your webpage.
 
@@ -132,7 +132,7 @@ let map;
 window.initMap = Util.createMap
 ```
 
-# Place Markers
+#### Place Markers
 
 When a search query is submitted, lat and lng coordinates extracted and
 passed into a `setMarkers` util function that renders markers onto Google Maps.
@@ -191,7 +191,7 @@ function setMarkers(location) {
 }
 ```
 
-# Draw Polyline Path
+#### Draw Polyline Path
 
 A path between two airports is drawn by instantiating a Google Map
 Polyline object. I pass in an array of two LatLng objects extracted from
