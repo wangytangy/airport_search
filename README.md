@@ -7,6 +7,10 @@ search actions and one for handling Google Map actions. A JSON file of airport
 data is provided for the scope of this project. Many APIs online require
 paid subscriptions so I will not be making AJAX requests to external sources.
 
+### Setup
+- run `npm install` to install modules
+- open `index.html` in the browser to test app
+
 ## Features
 * Search for any airport in the US (with autocomplete)
 * See a Google Map with search results plotted
