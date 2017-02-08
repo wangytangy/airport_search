@@ -59,9 +59,10 @@
 	  //avoids unnecessary computation until user stops typing
 	  clearTimeout(id);
 	  id = setTimeout(function() {
-	    let inputID = e.target.id;
 	    let input = e.target.value.toLowerCase();
 	    let dataList = document.getElementById('airports');
+
+	    //clear datalist items before attaching new ones
 	    while (dataList.firstChild) dataList.removeChild(dataList.firstChild);
 	    let airportIDs = Object.keys(airports);
 
@@ -75,11 +76,14 @@
 	    //create <option> element, set it's value
 	    filteredList.forEach((id) => {
 	      let option = document.createElement('option');
-	      option.value = `${airports[id].name}` + " " + `(${airports[id].IATA})` + " - " + `${airports[id].city}`;
+	      option.value = `${airports[id].name}`
+	        + " " + `(${airports[id].IATA})`
+	        + " - " + `${airports[id].city}`;
+
 	      //append option to <datalist>
 	      dataList.appendChild(option);
 	    });
-	  }, 200);
+	  }, 300);
 	}
 
 	function changeHeader(markers, distance) {
@@ -124,14 +128,11 @@
 	  }
 	}
 
-	function attachButtonListener() {
-	  document.getElementById('submit').addEventListener('click', handleSubmit);
-	}
 
 
 	document.addEventListener("DOMContentLoaded", function() {
 	  attachInputListeners();
-	  attachButtonListener();
+	  document.getElementById('submit').addEventListener('click', handleSubmit);
 	});
 
 
@@ -14428,7 +14429,10 @@
 	  }
 
 	  function setMarkers(location) {
-	    let latLng = new google.maps.LatLng(parseInt(location.lat), parseInt(location.lng));
+	    let latLng = new google.maps.LatLng(
+	      parseInt(location.lat),
+	      parseInt(location.lng
+	    ));
 	    let marker = new google.maps.Marker({
 	      position: latLng,
 	      title: location.name,
@@ -14436,14 +14440,15 @@
 	      animation: google.maps.Animation.DROP
 	    });
 
+	    //create infowindow to display title
 	    var infowindow = new google.maps.InfoWindow({
 	      content: location.name
 	    });
 
+	    //attach click listener on marker
 	    marker.addListener('click', function() {
 	      infowindow.open(map, marker);
 	    });
-
 	    return marker;
 	  }
 
@@ -14461,7 +14466,10 @@
 	    }
 	    let startPos = markers[0].getPosition();
 	    let endPos = markers[1].getPosition();
-	    let dist = google.maps.geometry.spherical.computeDistanceBetween(startPos, endPos);
+	    let dist = google.maps
+	      .geometry
+	      .spherical
+	      .computeDistanceBetween(startPos, endPos);
 	    let kilometers = dist/1000;
 	    let nautMiles = kilometers/1.852;
 	    nautMiles = Number(Math.round(nautMiles +'e2') +'e-2');
@@ -14496,7 +14504,6 @@
 	    path.setMap(map);
 	    return path;
 	  }
-
 
 	  return {
 	    createMap: createMap,
