@@ -4,8 +4,7 @@ require 'json'
 
 AIRPORTS_ARRAY = {}
 
-CSV.foreach("../data/airports_us.csv") do |row|
-  # debugger
+CSV.foreach("../../data/airports_us.csv") do |row|
   airport_name = row[1]
   AIRPORTS_ARRAY[airport_name] = {
     id: row[0],
@@ -19,13 +18,13 @@ CSV.foreach("../data/airports_us.csv") do |row|
   }
 end
 
-File.open("../data/airports_us.json", "w") do |f|
+File.open("../../data/airports_us.json", "w") do |f|
   f.write(AIRPORTS_ARRAY.to_json)
 end
 
 
 # {
-#   3411: {
+#   name: {
 #     id: 3411,
 #     name:
 #     city:
