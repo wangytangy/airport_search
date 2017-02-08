@@ -47,11 +47,12 @@
 	var Map = __webpack_require__(2);
 	let airports = __webpack_require__(1);
 	let id;
+	let markers = [];
+	let paths = [];
 
 	window.initMap = function() {
 	  Map.createMap();
 	}
-
 
 	function handleInputChange(e) {
 	  //loop through airports, filter by input
@@ -80,6 +81,12 @@
 	  }, 200);
 	}
 
+	function changeHeader(markers, distance) {
+	  let newHeader = `Total trip distance: `;
+	  newHeader += `${distance} nautical miles`;
+	  document.getElementById('header').innerHTML = newHeader;
+	}
+
 	function handleSubmit() {
 	  let inputVal1 = document.getElementById('input1').value;
 	  let inputVal2 = document.getElementById('input2').value;
@@ -88,23 +95,27 @@
 	  let matches2 = inputVal2.match(/^[^\(]+/);
 	  let matches = [matches1, matches2]
 
+	  //clear markers
+	  markers = Map.clearMarkers(markers);
+
 	  //loop through both inputs, assume "" and null values
-	  Map.clearMarkers();
 	  for (let i = 0; i < matches.length; i++) {
 	    if (matches[i]) {
 	      let location = airports[matches[i][0].trim()];
-	      debugger
-	      Map.setMarkers(location);
+	      markers.push(Map.setMarkers(location));
 	    }
 	  }
+	  //reset bounds of map
+	  Map.resetBounds(markers);
 
-	  if (matches1 && matches2) {
-	    let airport1 = airports[matches1[0].trim()];
-	    let airport2 = airports[matches1[0].trim()];
-	    Map.setMarkers([airport1, airport2]);
-	  }
+	  //calculate distance and display it
+	  let nautMiles = Map.calcDistance(markers);
+	  changeHeader(markers, nautMiles);
 
-	  //set markers
+	  //clear paths
+	  path = Map.clearPaths(paths);
+	  //draw Map.polyline?
+	  path.push(Map.drawPath(markers));
 	}
 
 	function attachInputListeners() {
@@ -14408,9 +14419,7 @@
 
 	const Map = (function() {
 
-	  const API_KEY = "AIzaSyBj2czDtrlCW9CGb_JucuQqabbRRVWCjKE";
 	  let map;
-	  let markers = [];
 
 	  function createMap() {
 	    let usa = new google.maps.LatLng(37.09024, -95.712891);
@@ -14426,24 +14435,71 @@
 
 	    let marker = new google.maps.Marker({
 	      position: latLng,
-	      title: 'Airport!'
+	      title: location.name,
+	      map: map
 	    });
-	    markers.push(marker);
-	    marker.setMap(map);
+	    return marker;
 	  }
 
-	  function clearMarkers() {
+	  function clearMarkers(markers) {
+	    console.log("markers cleared!");
 	    for (var i = 0; i < markers.length; i++) {
-	      markers[i].setMap(null)
+	      markers[i].setMap(null);
 	    }
-	    markers = [];
+	    return [];
+	  }
+
+	  function calcDistance(markers) {
+	    //return 0 if only 1 result
+	    if (markers.length < 2) {
+	      return 0;
+	    }
+	    let startPos = markers[0].getPosition();
+	    let endPos = markers[1].getPosition();
+	    let dist = google.maps.geometry.spherical.computeDistanceBetween(startPos, endPos);
+	    let kilometers = dist/1000;
+	    let nautMiles = kilometers/1.852;
+	    nautMiles = Number(Math.round(nautMiles +'e2') +'e-2');
+	    return nautMiles;
+	  }
+
+	  function resetBounds(markers) {
+	    let startPos = markers[0].getPosition();
+	    let endPos = markers[1].getPosition();
+	    let bounds = new google.maps.LatLngBounds();
+	    bounds.extend(startPos);
+	    bounds.extend(endPos);
+	    map.fitBounds(bounds);
+	  }
+
+	  function clearPaths(paths) {
+	    for (var i = 0; i < paths.length; i++) {
+	      paths[i].setMap(null);
+	    }
+	    return [];
+	  }
+
+	  function drawPath(markers) {
+	    const path = new google.maps.Polyline({
+	      geodesic: true,
+	      path: [markers[0].getPosition(), markers[1].getPosition()],
+	      strokeColor: "#FF0000",
+	      strokeOpacity: 1.0,
+	      strokeWeight: 2
+	    });
+	    path.setMap(map);
+	    return path;
 	  }
 
 
 	  return {
 	    createMap: createMap,
 	    setMarkers: setMarkers,
-	    clearMarkers: clearMarkers
+	    clearMarkers: clearMarkers,
+	    calcDistance: calcDistance,
+	    resetBounds: resetBounds,
+	    drawPath: drawPath,
+	    clearPaths: clearPaths
 	  }
 
 	})();
