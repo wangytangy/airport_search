@@ -1,5 +1,7 @@
 # Airport Search
 
+Try out [Airport Search live](https://wangytangy.github.io/airport_search/)
+
 Airport Search is a simple app that allows users to search for airports
 in the US, calculate their distance in nautical miles, and renders the trip
 on Google Maps. The app is built with two simple modules, one for handling
